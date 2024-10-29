@@ -67,8 +67,4 @@ class ChatView {
     }
 }
 
-안녕TV
-
-
-
 
