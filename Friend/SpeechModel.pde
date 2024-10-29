@@ -1,9 +1,8 @@
 import http.requests.*;
 import java.io.File;
-import config;
 
 class SpeechModel {
-    String apiKey = GPT_API_KEY;
+    String apiKey = ""; // Replace with your OpenAI API key
     String transcriptionText = "";
 
     String transcribeAudio(String filePath) {

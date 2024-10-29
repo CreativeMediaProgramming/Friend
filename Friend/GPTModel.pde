@@ -1,8 +1,7 @@
 import http.requests.*;
-import config;
 
 class GPTModel {
-    String apiKey = GPT_API_KEY; // GPT API key
+    String apiKey = ""; // GPT API key
     String apiUrl = "https://api.openai.com/v1/chat/completions";
 
     String getResponseFromGPT(String userInput) {
