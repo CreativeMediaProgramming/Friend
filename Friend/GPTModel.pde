@@ -1,10 +1,44 @@
 import http.requests.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 class GPTModel {
-    String apiKey = ""; // GPT API key
+    String apiKey;
     String apiUrl = "https://api.openai.com/v1/chat/completions";
 
+    GPTModel() {
+        apiKey = loadApiKey();
+        println("Loaded API Key: " + apiKey); // Debugging output
+    }
+
+    String loadApiKey() {
+        String key = null;
+        try {
+            // Use absolute path if necessary
+            String filePath = "C:\\Users\\Changhyun\\Desktop\\asdf\\Friend\\Friend\\config.txt"; // Change to absolute path if needed
+            println("Attempting to read API key from: " + filePath); // Debugging output
+
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            key = reader.readLine();
+            reader.close();
+
+            if (key == null || key.isEmpty()) {
+                println("API key is empty or null after reading from file."); // Debugging output
+            } else {
+                println("Successfully read API key from file."); // Debugging output
+            }
+        } catch (IOException e) {
+            println("Error reading API key: " + e.getMessage());
+        }
+        return key;
+    }
+
     String getResponseFromGPT(String userInput) {
+        if (apiKey == null || apiKey.isEmpty()) {
+            return "Error: API key is missing.";
+        }
+
         PostRequest post = new PostRequest(apiUrl);
         post.addHeader("Authorization", "Bearer " + apiKey);
         post.addHeader("Content-Type", "application/json");
