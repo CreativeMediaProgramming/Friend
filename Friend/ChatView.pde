@@ -66,3 +66,6 @@ class ChatView {
         scrollOffset = PApplet.constrain(scrollOffset, -maxOffset, 0); // 스크롤 범위 제한
     }
 }
+
+
+
