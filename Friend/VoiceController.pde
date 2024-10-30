@@ -17,6 +17,11 @@ class VoiceController {
     }
 
     void mousePressed() {
+        // Check if any UI button is pressed
+        if (!uiController.model.isModalVisible && (uiController.model.isExitButtonPressed(parent.mouseX, parent.mouseY) || uiController.model.isCreditsButtonPressed(parent.mouseX, parent.mouseY))) {
+            return; // Skip voice recording if a UI button is pressed
+        }
+
         if (!model.isRecording) {
             model.startRecording();
             chatController.model.addChatMessage("Recording started...");
