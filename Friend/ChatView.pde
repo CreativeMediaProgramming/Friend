@@ -1,8 +1,9 @@
+import java.util.List;
+
 class ChatView {
     PApplet parent;
     int windowWidth, windowHeight;
-    int profileHeight = 100; // 프로필 영역 높이 설정
-    float scrollOffset = 0; // 스크롤 오프셋
+    int profileHeight = 200; // 프로필 영역 높이 설정
     ArrayList<String> chatMessages; // 채팅 메시지 저장
 
     ChatView(PApplet parent, int windowWidth, int windowHeight) {
@@ -12,57 +13,59 @@ class ChatView {
         this.chatMessages = new ArrayList<String>(); // 초기화
     }
 
-void displayChatUI(ArrayList<String> chatMessages) {
-    this.chatMessages = chatMessages; // 인스턴스 변수에 할당
-    parent.textSize(20);
-    parent.textAlign(PApplet.LEFT, PApplet.TOP);
-    int xOffset = 20;
-    float currentYOffset = windowHeight - 20 + scrollOffset; // 스크롤 오프셋 적용
-
-    // Display messages from the bottom up
-    for (int i = chatMessages.size() - 1; i >= 0; i--) {
-        String message = chatMessages.get(i);
-        String[] words = message.split(" ");
-        StringBuilder formattedMessage = new StringBuilder();
-        int spaceCount = 0;
-
-        for (String word : words) {
-            formattedMessage.append(word).append(" ");
-            spaceCount++;
-            if (spaceCount >= 5) {
-                formattedMessage.append("\n");
-                spaceCount = 0;
-            }
+    void displayChatUI(ArrayList<String> chatMessages) {
+        if (chatMessages == null) {
+            chatMessages = new ArrayList<>(); // Null일 경우 빈 리스트로 초기화
         }
+        
+        // Only keep the last 12 messages
+        int start = Math.max(0, chatMessages.size() - 12);
+        List<String> recentMessages = chatMessages.subList(start, chatMessages.size());
 
-        String finalMessage = formattedMessage.toString().trim();
-        float bubbleWidth = parent.textWidth(finalMessage) + 30;
-        float bubbleHeight = (parent.textAscent() + parent.textDescent()) * (finalMessage.split("\n").length + 1) + 20;
+        float xOffset = 20;
+        float yOffset = profileHeight + 20; // yOffset 초기화
+        float rightMargin = 20; // Right margin for the chat bubble
+        parent.textSize(16);
+        parent.textAlign(PApplet.LEFT, PApplet.TOP);
 
-        // Draw the message if it is within the visible area
-        if (currentYOffset - bubbleHeight < windowHeight && currentYOffset > profileHeight) {
-            if (i % 2 == 0) {
-                parent.fill(200, 200, 255);
-                parent.rect(xOffset, currentYOffset - bubbleHeight, bubbleWidth, bubbleHeight, 10);
-                parent.fill(0);
-                parent.text(finalMessage, xOffset + 10, currentYOffset - bubbleHeight + 5);
-            } else {
-                parent.fill(255, 200, 200);
-                parent.rect(windowWidth - bubbleWidth - xOffset, currentYOffset - bubbleHeight, bubbleWidth, bubbleHeight, 10);
-                parent.fill(0);
-                parent.text(finalMessage, windowWidth - bubbleWidth - xOffset + 10, currentYOffset - bubbleHeight + 5);
+        for (String message : recentMessages) {
+            String[] words = message.split(" ");
+            StringBuilder line = new StringBuilder();
+            float maxWidth = 280;
+            float lineHeight = 20;
+            float bubblePadding = 10;
+            float bubbleWidth = 0;
+            ArrayList<String> lines = new ArrayList<>();
+
+            for (String word : words) {
+                if (parent.textWidth(line.toString() + word) > maxWidth) {
+                    lines.add(line.toString());
+                    bubbleWidth = Math.max(bubbleWidth, parent.textWidth(line.toString()));
+                    line = new StringBuilder();
+                }
+                line.append(word).append(" ");
             }
-        }
 
-        currentYOffset -= (bubbleHeight + 20); // Move up for the next message
+            // Add the last line
+            if (line.length() > 0) {
+                lines.add(line.toString());
+                bubbleWidth = Math.max(bubbleWidth, parent.textWidth(line.toString()));
+            }
+
+            // Draw the bubble for all lines
+            float bubbleHeight = lines.size() * lineHeight + 2 * bubblePadding;
+            parent.fill(255);
+            parent.rect(parent.width - bubbleWidth - 2 * bubblePadding - rightMargin, yOffset, bubbleWidth + 2 * bubblePadding, bubbleHeight, 10);
+
+            // Draw each line of text
+            parent.fill(0);
+            float textYOffset = yOffset + bubblePadding;
+            for (String l : lines) {
+                parent.text(l, parent.width - bubbleWidth - bubblePadding - rightMargin, textYOffset);
+                textYOffset += lineHeight;
+            }
+
+            yOffset += bubbleHeight + 10; // Add spacing between bubbles
+        }
     }
-}
-
-void scroll(float amount) {
-    scrollOffset += amount;
-    float totalHeight = chatMessages.size() * 100; // Estimate total height of all messages
-    float maxOffset = Math.max(0, totalHeight - (windowHeight - profileHeight));
-    scrollOffset = PApplet.constrain(scrollOffset, -maxOffset, 0); // 스크롤 범위 제한
-}
-
 }

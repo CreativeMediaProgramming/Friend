@@ -1,19 +1,21 @@
 class ChatController {
     ChatModel model;
-    ChatView view;
+    MascotView mascotView;
+    ChatView chatView;
+    PApplet parent;
 
-    ChatController(PApplet parent, int windowWidth, int windowHeight) {
+    ChatController(PApplet parent, int windowWidth, int windowHeight, MascotView mascotView) {
+        this.parent = parent;
         model = new ChatModel();
-        view = new ChatView(parent, windowWidth, windowHeight);
-    }
-
-    void initializeTestChat() {
-        model.addChatMessage("Hello, how are you?");
-        model.addChatMessage("I'm doing well, thank you!");
-        model.addChatMessage("What can you do?");
+        this.mascotView = mascotView;
+        this.chatView = new ChatView(parent, windowWidth, windowHeight);
     }
 
     void draw() {
-        view.displayChatUI(model.getChatMessages());
+        // Create a copy of the chat messages to avoid concurrent modification
+        ArrayList<String> messagesCopy = new ArrayList<>(model.getChatMessages());
+
+        // Use ChatView to display messages
+        chatView.displayChatUI(messagesCopy);
     }
 }

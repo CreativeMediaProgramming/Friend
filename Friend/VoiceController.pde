@@ -7,14 +7,13 @@ class VoiceController {
     boolean isTranscribing = false;
     PApplet parent;
 
-
-    VoiceController(PApplet parent, int windowWidth, int windowHeight, ChatController chatController) {
+    VoiceController(PApplet parent, int windowWidth, int windowHeight, ChatController chatController, MascotModel mascotModel, MascotView mascotView) {
         this.parent = parent;
         model = new VoiceModel(parent);
         view = new VoiceView(parent, windowWidth, windowHeight);
         this.chatController = chatController;
         speechController = new SpeechController(parent);
-        gptController = new GPTController(parent, chatController);
+        gptController = new GPTController(parent, chatController, mascotModel);
     }
 
     void mousePressed() {

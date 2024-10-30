@@ -8,7 +8,7 @@ class SpeechView {
     }
 
     void displayTranscription(String transcriptionText) {
-        parent.fill(0);
+        parent.fill(0, 255, 0);
         parent.textSize(16);
         parent.text(transcriptionText, 10, 30, parent.width - 20, parent.height - 40);
     }
