@@ -26,13 +26,16 @@ class VoiceController {
             chatController.model.addChatMessage("Recording stopped and saved.");
             chatController.model.addChatMessage("Generating...");
             isTranscribing = true;
-            // Use the absolute path for the audio file
 
-      String transcription = speechController.model.transcribeAudio(parent.sketchPath("recording.wav"));
-
-            chatController.model.addChatMessage(transcription); // Add transcribed text to chat
-            isTranscribing = false;
-            gptController.processTranscription(transcription.isEmpty() ? "hello GPT" : transcription); // Use "hello GPT" if transcription is empty
+            // Start a new thread for transcription
+            new Thread(new Runnable() {
+                public void run() {
+                    String transcription = speechController.model.transcribeAudio(parent.sketchPath("recording.wav"));
+                    chatController.model.addChatMessage(transcription); // Add transcribed text to chat
+                    isTranscribing = false;
+                    gptController.processTranscription(transcription.isEmpty() ? "hello GPT" : transcription);
+                }
+            }).start();
         }
         view.displayRecordingStatus(model.isRecording);
     }

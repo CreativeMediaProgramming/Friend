@@ -46,7 +46,9 @@ String filePath = parent.sketchPath("config.txt");
 
 void loadUserData() {
     try {
-        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Changhyun\\Desktop\\asdf\\Friend\\Friend\\DATA.txt"));
+        // Use parent to get the sketch path for a relative file path
+        String filePath = parent.sketchPath("DATA.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
         userName = reader.readLine();
         userAge = Integer.parseInt(reader.readLine());
         userGender = reader.readLine();
