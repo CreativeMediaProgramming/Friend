@@ -12,13 +12,19 @@ class GPTController {
         this.mascotModel = mascotModel;
     }
 
-    void processTranscription(String transcription) {
-        if (!isRequestPending) {
-            isRequestPending = true;
-            String gptResponse = model.getResponseFromGPT(transcription);
-            // Display GPT response as a speech bubble above the mascot
-            chatController.mascotView.displaySpeechBubble(mascotModel.x, mascotModel.y, gptResponse);
-            isRequestPending = false;
-        }
+void processTranscription(String transcription) {
+    if (!isRequestPending) {
+        isRequestPending = true;
+        new Thread(() -> {
+            try {
+                String gptResponse = model.getResponseFromGPT(transcription);
+                chatController.mascotView.displaySpeechBubble(mascotModel.x, mascotModel.y, gptResponse);
+            } catch (Exception e) {
+                println("Error processing transcription: " + e.getMessage());
+            } finally {
+                isRequestPending = false;
+            }
+        }).start();
     }
+}
 }

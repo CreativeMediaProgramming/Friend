@@ -80,43 +80,48 @@ void captureEvent(Capture c) {
 }
 
 void displayUserInfo() {
-    if (introController.model != null) {
-        // 배경 직사각형 색상 및 불투명도 설정 (밝은 회색, 알파 122)
-        fill(200, 122);
-        // 배경 직사각형 그리기 (위치와 크기는 텍스트에 맞게 조정, 모서리 둥글게)
-        rect(10, 10, 300, 120, 20); // 마지막 인자 20은 둥근 모서리의 반지름
+    try {
+        if (introController.model != null) {
+            // 배경 직사각형 색상 및 불투명도 설정 (밝은 회색, 알파 122)
+            fill(200, 122);
+            // 배경 직사각형 그리기 (위치와 크기는 텍스트에 맞게 조정, 모서리 둥글게)
+            rect(10, 10, 300, 120, 20); // 마지막 인자 20은 둥근 모서리의 반지름
 
-        fill(255); // 흰색 글자
+            fill(255); // 흰색 글자
 
-        // 날짜와 시간 글씨 크기 조정 
-        textSize(30); 
-        textAlign(LEFT, TOP); // 왼쪽 위 정렬
+            // 날짜와 시간 글씨 크기 조정 
+            textSize(30); 
+            textAlign(LEFT, TOP); // 왼쪽 위 정렬
 
-        // 현재 날짜와 시간 가져오기
-        String dateTime = year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + " " + nf(hour(), 2) + ":" + nf(minute(), 2) + ":" + nf(second(), 2);
+            // 현재 날짜와 시간 가져오기
+            String dateTime = year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + " " + nf(hour(), 2) + ":" + nf(minute(), 2) + ":" + nf(second(), 2);
 
-        // 날짜와 시간 출력
-        text(dateTime, 20, 20);
+            // 날짜와 시간 출력
+            text(dateTime, 20, 20);
 
-        // "Hi, 이름" 글씨 크기 조정 
-        textSize(28); 
-        text("Hi, " + introController.model.getUserName(), 20, 60);
+            // "Hi, 이름" 글씨 크기 조정 
+            textSize(28); 
+            text("Hi, " + introController.model.getUserName(), 20, 60);
 
-        // 성별, 나이, MBTI 글씨 크기 조정 
-        textSize(18); 
+            // 성별, 나이, MBTI 글씨 크기 조정 
+            textSize(18); 
 
-        // 성별, MBTI, 나이를 각각 3등분하여 배치
-        String gender = introController.model.isUserSex() ? "Male" : "Female";
-        String mbti = introController.model.getUserMBTI();
-        String age = "(" + introController.model.getUserAge() + ")";
+            // 성별, MBTI, 나이를 각각 3등분하여 배치
+            String gender = introController.model.isUserSex() ? "Male" : "Female";
+            String mbti = introController.model.getUserMBTI();
+            String age = "(" + introController.model.getUserAge() + ")";
 
-        // 성별 출력
-        text(gender, 20, 100);
+            // 성별 출력
+            text(gender, 20, 100);
 
-        // MBTI 출력
-        text(mbti, 140, 100);
+            // MBTI 출력
+            text(mbti, 140, 100);
 
-        // 나이 출력
-        text(age, 260, 100);
+            // 나이 출력
+            text(age, 260, 100);
+        }
+    } catch (NullPointerException e) {
+        println("NullPointerException caught in displayUserInfo: " + e.getMessage());
+        // 필요한 경우 추가적인 예외 처리 로직을 여기에 추가
     }
 }
