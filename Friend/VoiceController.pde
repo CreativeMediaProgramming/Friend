@@ -24,7 +24,7 @@ class VoiceController {
             chatController.model.addChatMessage("Generating...");
             isTranscribing = true;
             // Use the absolute path for the audio file
-            String transcription = speechController.model.transcribeAudio("C:\\Users\\Changhyun\\Desktop\\creativemedia\\Friend\\recording.wav");
+            String transcription = speechController.model.transcribeAudio("C:\\Users\\Changhyun\\Desktop\\asdf\\Friend\\Friend\\recording.wav");
             chatController.model.addChatMessage(transcription); // Add transcribed text to chat
             isTranscribing = false;
             gptController.processTranscription(transcription.isEmpty() ? "hello GPT" : transcription); // Use "hello GPT" if transcription is empty

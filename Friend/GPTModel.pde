@@ -6,9 +6,14 @@ import java.io.IOException;
 class GPTModel {
     String apiKey;
     String apiUrl = "https://api.openai.com/v1/chat/completions";
+    String userName;
+    int userAge;
+    String userGender;
+    String userMBTI;
 
     GPTModel() {
         apiKey = loadApiKey();
+        loadUserData();
         println("Loaded API Key: " + apiKey); // Debugging output
     }
 
@@ -34,6 +39,29 @@ class GPTModel {
         return key;
     }
 
+void loadUserData() {
+    try {
+        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Changhyun\\Desktop\\asdf\\Friend\\Friend\\DATA.txt"));
+        userName = reader.readLine();
+        userAge = Integer.parseInt(reader.readLine());
+        userGender = reader.readLine();
+        userMBTI = reader.readLine();
+        reader.close();
+        
+        // 디버깅 출력
+        println("UserName: " + userName);
+        println("UserAge: " + userAge);
+        println("UserGender: " + userGender);
+        println("UserMBTI: " + userMBTI);
+        
+        println("User data loaded: " + userName + ", " + userAge + ", " + userGender + ", " + userMBTI);
+    } catch (IOException e) {
+        println("Error reading user data: " + e.getMessage());
+    } catch (NumberFormatException e) {
+        println("Error parsing user age: " + e.getMessage());
+    }
+}
+
     String getResponseFromGPT(String userInput) {
         if (apiKey == null || apiKey.isEmpty()) {
             return "Error: API key is missing.";
@@ -45,8 +73,8 @@ class GPTModel {
 
         // JSON 형식으로 메시지 구성
         String jsonData = "{\"model\": \"gpt-4o-mini\", \"messages\": ["
-                        + "{\"role\": \"system\", \"content\": \"Respond to the user's answer in a conversational manner, using 2-3 sentences.\"},"
-                        + "{\"role\": \"user\", \"content\": \"" + escapeJson(userInput) + "\"}]}";
+                        + "{\"role\": \"system\", \"content\": \"Always start your response by addressing the user by their name, " + userName + ". Respond in a conversational manner, using 2-3 sentences. Consider the user's age, gender, and MBTI.\"},"
+                        + "{\"role\": \"user\", \"content\": \"Name: " + userName + ", Age: " + userAge + ", Gender: " + userGender + ", MBTI: " + userMBTI + ". " + escapeJson(userInput) + "\"}]}";
         post.addData(jsonData);
 
         post.send();
@@ -78,6 +106,7 @@ class GPTModel {
                    .replace("\f", "\\f")
                    .replace("\n", "\\n")
                    .replace("\r", "\\r")
-                   .replace("\t", "\\t");
+                   .replace("\t", "\\t")
+                   .replace("/", "\\/");
     }
 }

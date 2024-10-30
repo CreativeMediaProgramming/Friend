@@ -30,7 +30,7 @@ class SpeechModel {
             return "Error: API key is missing.";
         }
 
-        File audioFile = new File(filePath);
+        File audioFile = new File("C:\\Users\\Changhyun\\Desktop\\asdf\\Friend\\Friend\\recording.wav");
         println("Checking file path: " + audioFile.getAbsolutePath()); // Debugging output
         if (!audioFile.exists()) {
             println("Audio file not found at: " + audioFile.getAbsolutePath()); // Debugging output
@@ -42,6 +42,7 @@ class SpeechModel {
         post.addFile("file", filePath);
         post.addData("model", "whisper-1");
         post.addData("response_format", "text");
+        post.addData("language", "en");
         post.send();
 
         if (post.getContent() != null) {

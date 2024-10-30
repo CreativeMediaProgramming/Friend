@@ -7,6 +7,7 @@ WebcamController webcamController;
 IntroController introController;
 VoiceController voiceController;
 ChatController chatController;
+WeatherController weatherController;
 
 void settings() {
     size(1600, 900, P2D);
@@ -17,6 +18,7 @@ void setup() {
     introController = new IntroController(this);
     chatController = new ChatController(this, width, height);
     voiceController = new VoiceController(this, width, height, chatController);
+    weatherController = new WeatherController(this);
     
     chatController.initializeTestChat();
 
@@ -33,6 +35,7 @@ void draw() {
         displayUserInfo();
         voiceController.draw();
         chatController.draw(); // Draw the chat UI
+        weatherController.draw(); // Draw the weather UI
     }
 }
 
