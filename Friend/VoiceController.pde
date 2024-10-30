@@ -5,8 +5,11 @@ class VoiceController {
     SpeechController speechController;
     GPTController gptController;
     boolean isTranscribing = false;
+    PApplet parent;
+
 
     VoiceController(PApplet parent, int windowWidth, int windowHeight, ChatController chatController) {
+        this.parent = parent;
         model = new VoiceModel(parent);
         view = new VoiceView(parent, windowWidth, windowHeight);
         this.chatController = chatController;
@@ -24,7 +27,9 @@ class VoiceController {
             chatController.model.addChatMessage("Generating...");
             isTranscribing = true;
             // Use the absolute path for the audio file
-            String transcription = speechController.model.transcribeAudio("C:\\Users\\Changhyun\\Desktop\\asdf\\Friend\\Friend\\recording.wav");
+
+      String transcription = speechController.model.transcribeAudio(parent.sketchPath("recording.wav"));
+
             chatController.model.addChatMessage(transcription); // Add transcribed text to chat
             isTranscribing = false;
             gptController.processTranscription(transcription.isEmpty() ? "hello GPT" : transcription); // Use "hello GPT" if transcription is empty

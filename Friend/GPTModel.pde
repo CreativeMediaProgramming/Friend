@@ -10,8 +10,11 @@ class GPTModel {
     int userAge;
     String userGender;
     String userMBTI;
+    PApplet parent;
+    
 
-    GPTModel() {
+    GPTModel(PApplet parent) {
+        this.parent = parent;
         apiKey = loadApiKey();
         loadUserData();
         println("Loaded API Key: " + apiKey); // Debugging output
@@ -21,7 +24,9 @@ class GPTModel {
         String key = null;
         try {
             // Use absolute path if necessary
-            String filePath = "C:\\Users\\Changhyun\\Desktop\\asdf\\Friend\\Friend\\config.txt"; // Change to absolute path if needed
+
+String filePath = parent.sketchPath("config.txt");
+
             println("Attempting to read API key from: " + filePath); // Debugging output
 
             BufferedReader reader = new BufferedReader(new FileReader(filePath));

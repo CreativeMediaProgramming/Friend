@@ -5,7 +5,7 @@ class GPTController {
     boolean isRequestPending = false;
 
     GPTController(PApplet parent, ChatController chatController) {
-        model = new GPTModel();
+        model = new GPTModel(parent);
         view = new GPTView(parent);
         this.chatController = chatController;
     }

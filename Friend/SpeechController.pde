@@ -3,7 +3,7 @@ class SpeechController {
     SpeechView view;
 
     SpeechController(PApplet parent) {
-        model = new SpeechModel();
+        model = new SpeechModel(parent);
         view = new SpeechView(parent);
     }
 

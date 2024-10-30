@@ -7,15 +7,19 @@ import java.io.IOException;
 class SpeechModel {
     String apiKey;
     String transcriptionText = "";
+    PApplet parent;
 
-    SpeechModel() {
+    SpeechModel(PApplet parent) {
+        this.parent = parent;
         apiKey = loadApiKey();
         println("Loaded API Key: " + apiKey); // Debugging output
     }
 
     String loadApiKey() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Changhyun\\Desktop\\asdf\\Friend\\Friend\\config.txt"));
+
+
+    BufferedReader reader = new BufferedReader(new FileReader(parent.sketchPath("config.txt")));
             String key = reader.readLine();
             reader.close();
             return key;
@@ -30,7 +34,8 @@ class SpeechModel {
             return "Error: API key is missing.";
         }
 
-        File audioFile = new File("C:\\Users\\Changhyun\\Desktop\\asdf\\Friend\\Friend\\recording.wav");
+
+File audioFile = new File(parent.sketchPath("recording.wav"));  
         println("Checking file path: " + audioFile.getAbsolutePath()); // Debugging output
         if (!audioFile.exists()) {
             println("Audio file not found at: " + audioFile.getAbsolutePath()); // Debugging output
