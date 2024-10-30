@@ -40,6 +40,9 @@ class VoiceController {
     }
 
     void draw() {
-        view.displayVolume(model.getVolume());
+        if (model.isRecording) {
+            view.displayVolume(model.getVolume());
+        }
+        view.displayRecordingStatus(model.isRecording);
     }
 }

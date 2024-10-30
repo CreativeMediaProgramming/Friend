@@ -15,26 +15,24 @@ class MascotView {
         mascotGif.loop(); // GIF 반복 재생 설정
     }
 
-    void display(float x, float y) {
-        try {
-            if (mascotGif != null && mascotGif.width > 0 && mascotGif.height > 0) {
-                float aspectRatio = (float) mascotGif.height / mascotGif.width; // 비율 계산
-                float width = 200; // 가로 크기 설정
-                float height = width * aspectRatio; // 세로 크기 설정
-                parent.image(mascotGif, x, y, width, height); // 크기 조정하여 이미지 표시
-            } else {
-                println("Error: GIF is not properly loaded.");
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            println("Error displaying GIF: " + e.getMessage());
-        } catch (Exception e) {
-            println("Unexpected error: " + e.getMessage());
+void display(float x, float y) {
+    try {
+        if (mascotGif != null && mascotGif.width > 0 && mascotGif.height > 0) {
+            float aspectRatio = (float) mascotGif.height / mascotGif.width;
+            float width = 200;
+            float height = width * aspectRatio;
+            parent.image(mascotGif, x, y, width, height);
+        } else {
+            println("Error: GIF is not properly loaded.");
         }
-
-        if (!currentSpeechBubbleText.isEmpty()) {
-            displaySpeechBubble(x, y, currentSpeechBubbleText);
-        }
+    } catch (Exception e) {
+        println("Unexpected error displaying GIF: " + e.getMessage());
     }
+
+    if (!currentSpeechBubbleText.isEmpty()) {
+        displaySpeechBubble(x, y, currentSpeechBubbleText);
+    }
+}
 
     float getMascotWidth() {
         return 200; // 가로 크기 설정

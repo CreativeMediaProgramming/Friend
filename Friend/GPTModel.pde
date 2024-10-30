@@ -69,16 +69,16 @@ void loadUserData() {
     }
 }
 
-    String getResponseFromGPT(String userInput) {
-        if (apiKey == null || apiKey.isEmpty()) {
-            return "Error: API key is missing.";
-        }
+String getResponseFromGPT(String userInput) {
+    if (apiKey == null || apiKey.isEmpty()) {
+        return "Error: API key is missing.";
+    }
 
+    try {
         PostRequest post = new PostRequest(apiUrl);
         post.addHeader("Authorization", "Bearer " + apiKey);
         post.addHeader("Content-Type", "application/json");
 
-        // JSON 형식으로 메시지 구성
         String jsonData = "{\"model\": \"gpt-4o-mini\", \"messages\": ["
                         + "{\"role\": \"system\", \"content\": \"Always start your response by addressing the user by their name, " + userName + ". Respond in a conversational manner, using 2-3 sentences. Consider the user's age, gender, and MBTI.\"},"
                         + "{\"role\": \"user\", \"content\": \"Name: " + userName + ", Age: " + userAge + ", Gender: " + userGender + ", MBTI: " + userMBTI + ". " + escapeJson(userInput) + "\"}]}";
@@ -87,23 +87,22 @@ void loadUserData() {
         post.send();
 
         String responseContent = post.getContent();
-        println("Response Content: " + responseContent); // 응답 내용을 출력
+        println("Response Content: " + responseContent);
 
         if (responseContent != null) {
-            try {
-                JSONObject jsonResponse = parseJSONObject(responseContent);
-                JSONArray choices = jsonResponse.getJSONArray("choices");
-                if (choices != null && choices.size() > 0) {
-                    JSONObject firstChoice = choices.getJSONObject(0);
-                    JSONObject messageObj = firstChoice.getJSONObject("message");
-                    return messageObj.getString("content");
-                }
-            } catch (Exception e) {
-                println("Error parsing JSON response: " + e.getMessage());
+            JSONObject jsonResponse = parseJSONObject(responseContent);
+            JSONArray choices = jsonResponse.getJSONArray("choices");
+            if (choices != null && choices.size() > 0) {
+                JSONObject firstChoice = choices.getJSONObject(0);
+                JSONObject messageObj = firstChoice.getJSONObject("message");
+                return messageObj.getString("content");
             }
         }
-        return "Error: No response from GPT.";
+    } catch (Exception e) {
+        println("Error fetching GPT response: " + e.getMessage());
     }
+    return "Error: No response from GPT.";
+}
 
     // JSON 문자열 내에 포함된 특수 문자를 이스케이프 처리
     String escapeJson(String text) {
