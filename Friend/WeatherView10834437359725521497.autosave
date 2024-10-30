@@ -15,6 +15,7 @@ class WeatherView {
     void displayWeather(JSONObject data) {
         if (data != null && data.getInt("cod") == 200) {
             parent.textFont(font);
+            parent.fill(255);
             parent.textAlign(PApplet.LEFT, PApplet.TOP);
 
             String description = data.getJSONArray("weather").getJSONObject(0).getString("description");
@@ -30,26 +31,17 @@ class WeatherView {
                                  "Min: " + temp_min + "°C, Max: " + temp_max + "°C\n" +
                                  "Humidity: " + humidity + "%";
 
-            // 텍스트와 이미지를 오른쪽 위에 배치하기 위한 위치 계산
+            // Calculate the position to place the text and image at the top right
             float textWidth = parent.textWidth(weatherInfo);
-            float textHeight = parent.textAscent() + parent.textDescent() * 5; // 각 줄의 높이를 고려하여 총 높이 계산
-            float additionalHeight = 85; // 추가 여유 공간을 더 크게 설정
-            float gifWidth = 100; // GIF 너비를 100으로 가정
-            float totalWidth = textWidth + gifWidth + 40; // 텍스트와 GIF 사이의 여백을 늘림
-            float xOffset = 1600 - totalWidth - 90; // 오른쪽 여백을 더 줄여서 왼쪽으로 더 많이 이동
-            float yOffset = 20; // 상단 여백을 늘려서 전체 UI를 아래로 이동
+            float textHeight = 100; // Approximate height for the text block
+            float totalWidth = textWidth + 100; // Assuming GIF width is 100
+            float xOffset = parent.width - totalWidth - 90; // Adjusted to move left
+            float yOffset = 0; // Top margin
 
-            // 배경 직사각형 색상 및 불투명도 설정 (밝은 회색, 알파 122)
-            parent.fill(200, 122);
-            // 배경 직사각형 그리기 (위치와 크기는 텍스트와 GIF에 맞게 조정, 모서리 둥글게)
-            parent.rect(xOffset - 10, yOffset - 10, totalWidth + 95, textHeight + additionalHeight + 20, 20);
-
-            // 텍스트 색상 설정 (흰색)
-            parent.fill(255);
-            // 텍스트 표시
+            // Display the text
             parent.text(weatherInfo, xOffset, yOffset);
 
-            // 해당 날씨 GIF 표시
+            // Display corresponding weather GIF
             String weatherType = data.getJSONArray("weather").getJSONObject(0).getString("main").toLowerCase();
             String newGifFilename = weatherType + ".gif";
             if (gifOverlay == null || !currentGifFilename.equals(newGifFilename)) {
@@ -63,12 +55,12 @@ class WeatherView {
                 }
             }
 
-            // GIF의 새로운 크기 계산
+            // Calculate the new dimensions for the GIF
             if (gifOverlay != null) {
-                float gifHeight = textHeight + additionalHeight;
-                gifWidth = gifOverlay.width * (gifHeight / gifOverlay.height);
+                float gifHeight = textHeight;
+                float gifWidth = gifOverlay.width * (gifHeight / gifOverlay.height);
 
-                // GIF 표시
+                // Display the GIF
                 parent.image(gifOverlay, xOffset + textWidth + 10, yOffset, gifWidth, gifHeight);
             }
         }
