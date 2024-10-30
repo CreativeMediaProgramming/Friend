@@ -10,6 +10,10 @@ ChatController chatController;
 WeatherController weatherController;
 MascotController mascotController;
 
+UIview view;
+UIModel model;
+UIcontroller uiController;
+
 void settings() {
     size(1600, 900, P2D);
 }
@@ -34,6 +38,10 @@ void setup() {
 
     // Initialize GPTController with mascotModel
     GPTController gptController = new GPTController(this, chatController, mascotModel);
+
+    view = new UIview();
+    model = new UIModel();
+    uiController = new UIcontroller(model, view); // Initialize uiController
 }
 
 void draw() {
@@ -46,6 +54,9 @@ void draw() {
         chatController.draw(); // Draw the chat UI
         weatherController.draw(); // Draw the weather UI
         mascotController.update(width, height);
+
+        // Draw the exit button and credits
+        uiController.drawUI();
     }
 }
 
@@ -54,6 +65,7 @@ void mousePressed() {
         introController.mousePressed(); // Handle intro input
     } else {
         voiceController.mousePressed(); // Handle main program input
+        uiController.mousePressed(); // Call UIcontroller's mousePressed method
     }
 }
 
