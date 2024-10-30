@@ -1,20 +1,44 @@
 class IntroView {
     PApplet parent;
-    String[] prompts = {"Enter your name:", "Enter your age:", "Enter your sex (M/F):", "Enter your MBTI:"};
-    String[] responses = new String[4];
-    int currentPrompt = 0;
+    PImage bg;
+    float opacity = 0;
+    boolean fadingIn = true;
+    String name = "";
+    String gender = "";
+    String age = "";
+    String mbti = "";
 
     IntroView(PApplet parent) {
         this.parent = parent;
+        bg = parent.loadImage("background.jpg");
+        parent.textAlign(PApplet.CENTER, PApplet.CENTER);
     }
 
-void displayOverlay() {
-    parent.fill(0, 150); // 반투명 검정 배경
-    parent.rect(0, 0, parent.width, parent.height);
-    parent.fill(255);
-    parent.textSize(32);
-    parent.textAlign(PApplet.CENTER, PApplet.CENTER);
-    parent.text(prompts[currentPrompt], parent.width / 2, parent.height / 2 - 60);
-    parent.text(responses[currentPrompt], parent.width / 2, parent.height / 2 + 60);
-}
+    void drawBackground() {
+        parent.image(bg, 0, 0, parent.width, parent.height);
+    }
+
+    void drawText(String text, float x, float y, int size, int alpha) {
+        parent.fill(0, 0, 0, alpha);
+        parent.textSize(size);
+        parent.text(text, x, y);
+    }
+
+    void drawInputBox(float x, float y, float w, float h, String text) {
+        parent.fill(255);
+        parent.rect(x, y, w, h);
+        parent.fill(0);
+        parent.text(text, x + w / 2, y + h / 2);
+    }
+
+    void drawButton(float x, float y, float w, float h, String text) {
+        parent.noFill();
+        parent.stroke(0);
+        parent.rect(x, y, w, h);
+        parent.fill(0);
+        parent.textSize(30);
+        parent.text(text, x + w / 2, y + h / 2);
+    }
+
+    // Add more methods to handle specific frames and UI elements
 }

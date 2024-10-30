@@ -26,23 +26,27 @@ void setup() {
 }
 
 void draw() {
-    webcamController.draw(); // 웹캠을 가장 먼저 그립니다.
     if (!introController.introComplete) {
-        introController.view.displayOverlay();
+        introController.draw(); // Draw the intro UI
     } else {
+        webcamController.draw(); // Draw the webcam after intro is complete
         displayUserInfo();
         voiceController.draw();
-        chatController.draw(); // 채팅 UI를 그립니다.
+        chatController.draw(); // Draw the chat UI
     }
 }
 
 void mousePressed() {
-    voiceController.mousePressed();
+    if (!introController.introComplete) {
+        introController.mousePressed(); // 인트로 입력 처리
+    } else {
+        voiceController.mousePressed(); // 메인 프로그램 입력 처리
+    }
 }
 
 void keyPressed() {
     if (!introController.introComplete) {
-        introController.keyPressed(key);
+        introController.keyPressed(key); // 인트로 입력 처리
     }
 }
 

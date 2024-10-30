@@ -45,7 +45,7 @@ class GPTModel {
 
         // JSON 형식으로 메시지 구성
         String jsonData = "{\"model\": \"gpt-4o-mini\", \"messages\": ["
-                        + "{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},"
+                        + "{\"role\": \"system\", \"content\": \"Respond to the user's answer in a conversational manner, using 2-3 sentences.\"},"
                         + "{\"role\": \"user\", \"content\": \"" + escapeJson(userInput) + "\"}]}";
         post.addData(jsonData);
 
